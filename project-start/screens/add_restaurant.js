@@ -1,9 +1,10 @@
 import React from 'react';
-import {TextInput,View,Text} from 'react-native';
+import {TextInput,View} from 'react-native';
 import {globalStyles} from '../styles/global.js';
 import {Formik} from 'formik';
 import CustomButton from '../components/button.js';
 import Header from '../components/header.js';
+import {insertRestaurant} from '../repsitory/insertRestaurant.js'
 
 export default function AddRestaurant() {
     
@@ -12,9 +13,13 @@ export default function AddRestaurant() {
                 <Header text='Add Restaurant'/> 
                 <View style={globalStyles.form}>
                     <Formik
-                        initialValues={{ hotelName: '',contactName: '',add: '',coordinates: '',phNum: '',uid: '',pass: ''}}
-                        onSubmit={(value,actions)=>{
-                            actions.resetForm();
+                        initialValues={{ hotelName: '',contactName: '',address: '',coordinates: '',phNum: '',uid: '',pass: ''}}
+                        onSubmit={(values,actions)=>{
+                            insertRestaurant(values).then((result) => {
+                                if (result === 'ok') {
+                                    actions.resetForm();
+                                }
+                            });
                             console.log(values);
                         }}
                     >
@@ -36,7 +41,7 @@ export default function AddRestaurant() {
                                     multiline
                                     style={globalStyles.input}
                                     placeholder='enter hotel address'
-                                    onChangeText={props.handleChange('add')}
+                                    onChangeText={props.handleChange('address')}
                                     value={props.values.add}
                                 />
                                 <TextInput
